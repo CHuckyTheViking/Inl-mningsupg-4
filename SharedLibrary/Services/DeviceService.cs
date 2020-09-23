@@ -1,33 +1,40 @@
-﻿using Microsoft.Azure.Devices.Client;
+﻿using MAD = Microsoft.Azure.Devices;
+using Microsoft.Azure.Devices.Client;
 using Newtonsoft.Json;
 using SharedLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Azure.Devices;
+using System.Reflection.Metadata.Ecma335;
+using Microsoft.AspNetCore.Http;
 
 namespace SharedLibrary.Services
 {
     public class DeviceService
     {
+
+
         private static readonly string _connweather = "http://api.weatherstack.com/current?access_key=e699857f79960f12fc50911e6203d374&query=koping";
         private static HttpClient _client = new HttpClient();
 
         private static readonly string _connect = "HostName=WIN20-iothub.azure-devices.net;DeviceId=IotDeviceUpg4;SharedAccessKey=atKNxnC4x43YsnC9vaEEga9R8P1U7iDVhweUILuMAkM=";
-        public static readonly DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(_connect, TransportType.Mqtt);
+        public static readonly DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(_connect, MAD.Client.TransportType.Mqtt);
 
         public static ObservableCollection<AzureMessageModel> receiveMessage = new ObservableCollection<AzureMessageModel>();
-
+ 
         public static void sendmessage()
         {
-            DeviceService.SendMessageAsync(deviceClient).GetAwaiter();
+            SendMessageAsync(deviceClient).GetAwaiter();
         }
         public static async Task receivemessage()
         {
-            await DeviceService.ReceiveMessageAsync(deviceClient);
+            await ReceiveMessageAsync(deviceClient);
         }
 
         public static async Task SendMessageAsync(DeviceClient deviceClient)
@@ -47,7 +54,7 @@ namespace SharedLibrary.Services
 
                     var json = JsonConvert.SerializeObject(data);
 
-                    var payload = new Message(Encoding.UTF8.GetBytes(json));
+                    var payload = new MAD.Client.Message(Encoding.UTF8.GetBytes(json));
                     await deviceClient.SendEventAsync(payload);
 
                 }
@@ -57,13 +64,11 @@ namespace SharedLibrary.Services
             {
                 throw;
             }
-
         }
 
 
         public static async Task ReceiveMessageAsync(DeviceClient deviceClient)
         {
-
             while (true)
             {
                 try
@@ -83,9 +88,7 @@ namespace SharedLibrary.Services
                 {
                     throw;
                 }
-
             }
-
         }
     }
 }
