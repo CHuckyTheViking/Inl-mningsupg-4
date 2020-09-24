@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.Devices;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Http;
+using System.Net;
 
 namespace SharedLibrary.Services
 {
@@ -28,9 +29,9 @@ namespace SharedLibrary.Services
 
         public static ObservableCollection<AzureMessageModel> receiveMessage = new ObservableCollection<AzureMessageModel>();
  
-        public static void sendmessage()
+        public static async Task sendmessage()
         {
-            SendMessageAsync(deviceClient).GetAwaiter();
+            await SendMessageAsync(deviceClient);
         }
         public static async Task receivemessage()
         {
@@ -45,7 +46,6 @@ namespace SharedLibrary.Services
                 if (response.IsSuccessStatusCode)
                 {
                     WeatherDataModel weather = JsonConvert.DeserializeObject<WeatherDataModel>(await response.Content.ReadAsStringAsync());
-
                     var data = new Current
                     {
                         temperature = weather.current.temperature,
@@ -53,12 +53,9 @@ namespace SharedLibrary.Services
                     };
 
                     var json = JsonConvert.SerializeObject(data);
-
                     var payload = new MAD.Client.Message(Encoding.UTF8.GetBytes(json));
                     await deviceClient.SendEventAsync(payload);
-
                 }
-
             }
             catch (Exception)
             {
@@ -77,17 +74,12 @@ namespace SharedLibrary.Services
                     if (payload == null)
                         continue;
 
-                    var azm = new AzureMessageModel { MessageAzure = Encoding.UTF8.GetString(payload.GetBytes()) };
-
-                    receiveMessage.Add(azm);
+                    receiveMessage.Add(new AzureMessageModel {MessageAzure = Encoding.UTF8.GetString(payload.GetBytes())});
 
                     await deviceClient.CompleteAsync(payload);
-
                 }
                 catch (Exception)
-                {
-                    throw;
-                }
+                { }
             }
         }
     }

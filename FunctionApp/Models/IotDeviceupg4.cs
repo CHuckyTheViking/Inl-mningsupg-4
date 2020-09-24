@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using FunctionApp.Models;
 using Microsoft.Azure.Devices;
 
-namespace FunctionApp
+namespace FunctionApp.Models
 {
     public static class IotDeviceupg4
     {
@@ -22,18 +22,14 @@ namespace FunctionApp
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            string targetDeviceId = req.Query["targetdeviceid"];
             string message = req.Query["message"];
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
             var data = JsonConvert.DeserializeObject<BodyMessageModel>(requestBody);
 
-            targetDeviceId = targetDeviceId ?? data?.TargetDeviceId;
             message = message ?? data?.Message;
-            Console.WriteLine($"{message}");
-
-            //await DeviceService.IotDeviceupg4(serviceClient, targetDeviceId, message);
+            Console.WriteLine($"Message Received: {message}");
 
             return new OkResult();
         }
