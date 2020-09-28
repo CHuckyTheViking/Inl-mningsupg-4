@@ -38,40 +38,12 @@ namespace UwpIotDevice
             this.InitializeComponent();
             Bodys = DeviceService.receiveMessage;
             DeviceService.receivemessage().GetAwaiter();
-            //await gethttprequest(HttpRequest req);
-        
-            
+
         }
         private void btnsendMessage_Click(object sender, RoutedEventArgs e)
         {
             DeviceService.sendmessage().GetAwaiter();
         }
-        //public static void gethttprequest(HttpRequest req)
-        //{
-
-        //    List<string> hej = new List<string>();
-        //    HttpClient client = new HttpClient();
-
-        //    client.GetAsync("http://localhost:7071/api/IotDeviceupg4");
-
-        //    dynamic requestBody = new StreamReader(req.Body);
-        //    var data = JsonConvert.DeserializeObject<BodyMessageModel>(requestBody);
-        //    hej.Add(data.Message);
-
-        //}
-        //public static async Task Run(HttpRequest req)
-            
-        //{
-        //    //string message;
-        //    List<string> hej = new List<string>();
-        //    HttpClient client = new HttpClient();
-        //    //http://localhost:7071/api/IotDeviceupg4?targetdeviceid=IotDeviceupg4&message=Hejsan
-        //    await client.GetAsync("http://localhost:7071/api/IotDeviceupg4?targetdeviceid=IotDeviceupg4&message="+ message);
-        //    //http://localhost:7071/api/IotDeviceupg4
-        //    string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-        //    var data = JsonConvert.DeserializeObject<BodyMessageModel>(requestBody);
-        //    hej.Add(data.Message);
-        //}
 
     }
 }

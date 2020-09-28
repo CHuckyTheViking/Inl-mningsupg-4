@@ -121,7 +121,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Models\AzureMessageModel.cs" />
-    <Compile Include="Models\BodyMessageModel.cs" />
     <Compile Include="Models\WeatherDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DeviceService.cs" />

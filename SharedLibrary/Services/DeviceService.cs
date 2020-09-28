@@ -14,12 +14,13 @@ using Microsoft.Azure.Devices;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Http;
 using System.Net;
+using System.Net.Sockets;
+using DotNetty.Transport.Channels.Local;
 
 namespace SharedLibrary.Services
 {
     public class DeviceService
     {
-
 
         private static readonly string _connweather = "http://api.weatherstack.com/current?access_key=e699857f79960f12fc50911e6203d374&query=koping";
         private static HttpClient _client = new HttpClient();
@@ -82,5 +83,6 @@ namespace SharedLibrary.Services
                 { }
             }
         }
+
     }
 }
